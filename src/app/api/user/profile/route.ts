@@ -214,6 +214,14 @@ export async function PATCH(request: NextRequest) {
     }
 
     // For users with existing password, verify current password
+    if (!validatedData.currentPassword) {
+      return errorResponse(
+        'Current password is required',
+        HttpStatus.BAD_REQUEST,
+        ErrorCode.VALIDATION_ERROR
+      );
+    }
+
     const isPasswordValid = await user.comparePassword(validatedData.currentPassword);
     if (!isPasswordValid) {
       logger.security('password-change-failed', { ip, userId: authUser.userId, reason: 'invalid_current_password' });
