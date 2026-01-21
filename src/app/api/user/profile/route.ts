@@ -207,7 +207,7 @@ export async function PATCH(request: NextRequest) {
       user.password = validatedData.newPassword;
       await user.save();
 
-      logger.auth('oauth-password-set', user.email, { ip });
+      logger.auth('password-change', user.email, { ip, provider: user.provider });
 
       const response = successResponse(null, 'Password set successfully. You can now login with email and password.');
       return addSecurityHeaders(response);
