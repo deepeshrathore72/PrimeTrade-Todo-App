@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
         existingUser.lastName = sanitizedLastName;
         await existingUser.save();
 
-        logger.auth('oauth-password-set', sanitizedEmail);
+        logger.auth('password-change', sanitizedEmail, { provider: existingUser.provider });
 
         // Generate JWT token
         const token = generateToken({
