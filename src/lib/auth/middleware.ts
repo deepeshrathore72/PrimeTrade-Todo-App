@@ -30,7 +30,13 @@ export async function authenticateRequest(
   // First, try NextAuth session token
   try {
     const secret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
-    const nextAuthToken = await getToken({ req: request, secret });
+    const isSecure = process.env.NEXTAUTH_URL?.startsWith('https://') || process.env.NODE_ENV === 'production';
+    
+    const nextAuthToken = await getToken({ 
+      req: request, 
+      secret,
+      secureCookie: isSecure,
+    });
     
     if (nextAuthToken?.email) {
       // Get user from database to get the userId

@@ -33,11 +33,13 @@ export async function middleware(request: NextRequest) {
 
   // Get the secret (NextAuth v5 uses AUTH_SECRET, v4 uses NEXTAUTH_SECRET)
   const secret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
+  const isSecure = process.env.NEXTAUTH_URL?.startsWith('https://') || process.env.NODE_ENV === 'production';
 
   // Check for NextAuth session token
   const token = await getToken({
     req: request,
     secret: secret,
+    secureCookie: isSecure,
   });
 
   // Also check for legacy JWT token in cookies
